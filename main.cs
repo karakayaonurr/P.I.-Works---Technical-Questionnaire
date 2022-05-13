@@ -13,6 +13,9 @@ class TechnicalQuestionnaire
         
         //Create a Array with lineCount
         int[,] variableArray = new int[lineCount,lineCount];
+
+        //Create a Array for Sum
+        int[,] sumArray = new int[lineCount,lineCount];
         
         //Read the File and set the variableArray with inputs
         using (var readFile = new StreamReader("inputs.txt"))
@@ -31,19 +34,41 @@ class TechnicalQuestionnaire
             }
         }
         
+        //Define a variables for check max deep line
+        int checkMaxLine = 0;
+        bool checkMaxLineTmp = false;
+
         //Find the maximum sum of the numbers according to given rules
-        for (int i = (lineCount-2); i >= 0; i--) {
-			for (int j = 0; j < (lineCount-1); j++) {
+        for (int i = 1; i < lineCount; i++) {
+			for (int j = 0; j <= i; j++) {
 			    if(IsThisPrimeNumber(variableArray[i,j])){
 			        variableArray[i,j]=0;
 			    }else{
-			        variableArray[i,j] = Math.Max(variableArray[i, j] + variableArray[i+1, j], variableArray[i,j] + variableArray[i+1, j+1]);
+			        variableArray[i,j] = Math.Max(variableArray[i-1, j] + variableArray[i, j], variableArray[i,j] + variableArray[i-1, j+1]);
+                    checkMaxLineTmp=True;
 			    }
 			}
+
+            if(checkMaxLineTmp==true){
+                checkMaxLine = checkMaxLine+1;
+                checkMaxLineTmp = false;
+            }else{
+                break;
+            }
 		}
-		
+
+        //Find the max sum in deep row
+        int max = variableArray[checkMaxLine][0];
+        for (int i = 1; j < checkMaxLine; i++)
+        {
+            if (A[checkMaxLine][i] > max)
+            {
+            max = A[checkMaxLine][i];
+            }
+        }
+
 		//Print result on the screen
-		Console.WriteLine (variableArray [0, 0]);
+		Console.WriteLine (max);
     }
     
     //Prime number check function
